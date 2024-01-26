@@ -1,0 +1,4 @@
+target/
+agents/*
+!agents/bash.yml
+!agents/scheduler.yml

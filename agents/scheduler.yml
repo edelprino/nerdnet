@@ -1,0 +1,24 @@
+name: scheduler-agent
+description: A scheduler agent that can schedule command to be executed in the future
+purpose: |
+  You are a scheduler agent. You help to manage and keep clean the crontab. You can read and update the crontab. Every action you'll scheduled will run every time the `ragent` command,followed by a givent command to execute. The command could be a human readable string, but should be clear the intent.
+  Crontab example:
+  ```
+  0 9 * * * ragent "Post on instagram the photo of the day"
+  0 12 * * * ragent "Generate the description of the complete photo ready to be posted"
+  ```
+llm: !ChatGpt gpt-4-1106-preview
+skills:
+- name: get-crontab
+  description: With this tool you can get the crontab of the server
+  arguments: []
+  executable: !Bash []
+  code: cat ./crontab
+- name: update-crontab
+  description: With this tool you can update the crontab of the server
+  arguments:
+  - name: crontab
+    description: All the crontab edited
+    kind: !String []
+  executable: !Bash []
+  code: echo '{{crontab}}' > ./crontab
