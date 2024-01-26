@@ -36,6 +36,7 @@ impl Argument {
 enum Executable {
     Bash(),
     Agent(Agent),
+    Python(),
 }
 
 impl Executable {
@@ -43,6 +44,14 @@ impl Executable {
         match self {
             Executable::Bash() => {
                 let output = Command::new("bash")
+                    .arg("-c")
+                    .arg(code)
+                    .output()
+                    .expect("failed to execute process");
+                String::from_utf8(output.stdout).unwrap()
+            }
+            Executable::Python() => {
+                let output = Command::new("python")
                     .arg("-c")
                     .arg(code)
                     .output()
