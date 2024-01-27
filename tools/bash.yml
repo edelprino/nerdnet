@@ -1,4 +1,4 @@
-- name: Bash
+- name: bash
   description: Bash Command Line
   arguments:
   - name: command

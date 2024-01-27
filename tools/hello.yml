@@ -1,0 +1,10 @@
+- name: hello_with_python
+  description: With this tool you can test if you execute python code
+  arguments:
+    - name: nando
+      description: A random string, give what you want
+      kind: string
+  executable: python
+  code: |
+    print("It seems that python is working")
+    print("This is what agent invent: {{nando}}")

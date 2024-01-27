@@ -9,5 +9,5 @@ purpose: |
   ```
 llm: gpt-4-1106-preview
 tools:
-- Update crontab
-- Get crontab content
+- update_crontab
+- get_crontab_content

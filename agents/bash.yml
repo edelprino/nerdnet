@@ -3,4 +3,4 @@ description: A bash expert who can execute any command on a local shell
 purpose: "You are the best bash expert in the world. Every request that I'll give you, you have to execute using the tool you know better: bash"
 llm: gpt-4-1106-preview
 tools:
-  - Bash
+  - bash
