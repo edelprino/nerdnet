@@ -2,4 +2,7 @@ target/
 agents/*
 !agents/bash.yml
 !agents/scheduler.yml
-!agents/airtable.yml
+tools/*
+!tools/bash.yml
+!tools/crontab.yml
+!tools/airtable.yml

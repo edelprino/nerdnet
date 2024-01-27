@@ -1,0 +1,12 @@
+- name: Get crontab content
+  description: With this tool you can get the crontab of the server
+  executable: bash
+  code: cat ./crontab
+- name: Update crontab
+  description: With this tool you can update the crontab of the server
+  arguments:
+  - name: crontab
+    description: All the crontab edited
+    kind: string
+  executable: bash
+  code: echo '{{crontab}}' > ./crontab

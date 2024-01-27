@@ -1,0 +1,8 @@
+- name: Bash
+  description: Bash Command Line
+  arguments:
+  - name: command
+    description: Command to execute
+    kind: string
+  executable: bash
+  code: "{{command}}"

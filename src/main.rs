@@ -2,12 +2,14 @@
 use llm::{Message, ToolCall, LLM};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
 use std::fs;
 use std::io;
 use std::io::prelude::*;
 use std::process::Command;
 
 mod llm;
+mod serialization;
 
 type Purpose = String;
 
@@ -205,18 +207,38 @@ impl Agent {
 fn main() {
     let chatgpt4 = LLM::chatgpt("gpt-4-1106-preview");
 
-    let mut agents = vec![];
-    let paths = fs::read_dir("./agents").unwrap();
-    for path in paths {
-        let path = path.unwrap().path();
+    println!("Loading Tools");
+    let mut tools: HashMap<String, Tool> = HashMap::new();
+    let tool_files = fs::read_dir("./tools").unwrap();
+    for tool_file in tool_files {
+        let path = tool_file.unwrap().path();
         if path.extension().and_then(|s| s.to_str()) == Some("yml") {
-            println!("Loading agent {:?}", path);
+            println!(" - {}", path.to_str().unwrap());
             let mut contents = String::new();
             fs::File::open(&path)
                 .unwrap()
                 .read_to_string(&mut contents)
                 .unwrap();
-            let agent: Agent = serde_yaml::from_str(&contents).unwrap();
+            let tool = serialization::tools_from_yaml(&contents);
+            for (name, tool) in tool {
+                tools.insert(name, tool);
+            }
+        }
+    }
+
+    println!("Loading Agents");
+    let mut agents = vec![];
+    let paths = fs::read_dir("./agents").unwrap();
+    for path in paths {
+        let path = path.unwrap().path();
+        if path.extension().and_then(|s| s.to_str()) == Some("yml") {
+            println!(" - {}", path.to_str().unwrap());
+            let mut contents = String::new();
+            fs::File::open(&path)
+                .unwrap()
+                .read_to_string(&mut contents)
+                .unwrap();
+            let agent: Agent = serialization::agents_from_yaml(&contents, &tools);
             agents.push(agent);
         }
     }
