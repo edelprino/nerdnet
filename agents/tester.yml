@@ -4,4 +4,5 @@ purpose: |
   Your mission is to test every function that this tool offers, so you have to run every tool you know and see if it run correctly or not. If you receive an error in input notify me.
 llm: gpt-4-1106-preview
 tools:
-- hello_with_python
+- hello_test
+- goodbye_test

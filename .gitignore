@@ -6,4 +6,4 @@ agents/*
 tools/*
 !tools/bash.yml
 !tools/crontab.yml
-!tools/hello.yml
+!tools/test.yml

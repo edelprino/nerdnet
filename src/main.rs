@@ -50,17 +50,24 @@ impl Executable {
                     .arg(code)
                     .output()
                     .expect("failed to execute process");
-                String::from_utf8(output.stdout).unwrap()
+                let stdout = String::from_utf8(output.stdout).unwrap();
+                println!("output: {:?}", stdout);
+                stdout
             }
             Executable::Python() => {
-                let output = Command::new("bash")
-                    .arg("-c")
-                    .arg("python3")
-                    .arg(code)
+                let filename = format!("/tmp/script.py");
+                fs::write(&filename, code).expect("Unable to write file");
+                let output = Command::new("python3")
+                    .arg(&filename)
                     .output()
                     .expect("failed to execute process");
-                println!("output: {:?}", output);
-                String::from_utf8(output.stdout).unwrap()
+                if !output.status.success() {
+                    println!("error: {:?}", output.stderr);
+                }
+                fs::remove_file(&filename).expect("Unable to delete file");
+                let stdout = String::from_utf8(output.stdout).unwrap();
+                println!("output: {:?}", stdout);
+                stdout
             }
             Executable::Agent(agent) => {
                 let output = agent.start(code.to_string());
@@ -116,6 +123,12 @@ impl Tool {
     }
 
     fn execute(&self, call: ToolCall) -> Message {
+        match &self.executable {
+            Executable::Agent(_) => {}
+            _ => {
+                println!("Tool {}: I'm executing", self.name);
+            }
+        }
         let arguments: Value = serde_json::from_str(call.arguments()).unwrap();
         let mut command = self.code.clone();
         for argument in self.arguments.iter() {
@@ -124,13 +137,6 @@ impl Tool {
                     let value = arguments[&argument.name].as_str().unwrap();
                     command = command.replace(&format!("{{{{{}}}}}", argument.name), value);
                 }
-            }
-        }
-
-        match self.executable {
-            Executable::Agent(_) => {}
-            _ => {
-                println!("Tool {}: I'm executing `{}`", self.name, command);
             }
         }
 
