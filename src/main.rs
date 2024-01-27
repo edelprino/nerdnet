@@ -51,11 +51,13 @@ impl Executable {
                 String::from_utf8(output.stdout).unwrap()
             }
             Executable::Python() => {
-                let output = Command::new("python")
+                let output = Command::new("bash")
                     .arg("-c")
+                    .arg("python3")
                     .arg(code)
                     .output()
                     .expect("failed to execute process");
+                println!("output: {:?}", output);
                 String::from_utf8(output.stdout).unwrap()
             }
             Executable::Agent(agent) => {

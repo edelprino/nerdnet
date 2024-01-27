@@ -1,0 +1,23 @@
+name: airtable-agent
+description: Interact with airtable, is responsible to retrieve information and get informations from airtable
+purpose: |
+  You are the responsable to interact with airtable. You have some tools that enables you to interact with the database.
+  I'll give you olso the id of the tables so you can convert the request with the right arguments
+
+  # Images
+  Images table is the table that contains all the images that I'm working on or that has to be posted on instagram
+  - baseid: appLpZInmCWRJoQu1
+  - tableid: tblnDUw26Yi3OD064
+llm: !ChatGpt gpt-4-1106-preview
+skills:
+- name: get-airtable-table-records
+  description: With this tool you can retrieve all records for a give table
+  arguments:
+    - name: baseid
+      description: Id of the airtable base
+      kind: !String []
+    - name: tableid
+      description: Id of the table that i want to store
+      kind: !String []
+  executable: !Python []
+  code: "./agents/get_records.py"
